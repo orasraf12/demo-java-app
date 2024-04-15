@@ -5,13 +5,14 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/orasraf12/demo-java-app' // Replace with your git repository details
+                git branch: 'main', url: 'https://github.com/orasraf12/demo-java-app' 
             }
         }
         stage('Build Image') {
             steps {
-                sh 'mvn clean install -DskipTests' // Build the project without tests (adjust as needed)
-                // Use an x86 compatible builder image (replace with actual image name)
+                sh 'mvnw clean'
+                // sh 'mvn clean install -DskipTests' // Build the project without tests (adjust as needed)
+                // // Use an x86 compatible builder image (replace with actual image name)
                 sh 'mvn spring-boot:build-image'
             }
         }
