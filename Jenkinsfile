@@ -1,3 +1,4 @@
+
 pipeline {
     agent any // Run on any available agent
 
@@ -22,9 +23,11 @@ pipeline {
         }
         success {
             // Define actions on successful build (e.g., send notification)
+            echo 'Build Successful!' // Example message (replace with your desired action)
         }
         failure {
             // Define actions on build failure (e.g., send notification)
+            echo 'Build Failed!' // Example message (replace with your desired action)
         }
     }
 }
