@@ -11,8 +11,8 @@ pipeline {
         stage('Build Image') {
             steps {
                 sh 'mvn clean test -e'
-                // sh 'mvn clean install -DskipTests' // Build the project without tests (adjust as needed)
-                // // Use an x86 compatible builder image (replace with actual image name)
+                sh 'mvn clean install -DskipTests' // Build the project without tests (adjust as needed)
+                sh 'ls -l'
                 sh 'mvn spring-boot:build-image'
             }
         }
