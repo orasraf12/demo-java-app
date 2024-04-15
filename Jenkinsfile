@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Build Image') {
             steps {
-                sh 'mvnw clean'
+                sh 'mvn clean test -e'
                 // sh 'mvn clean install -DskipTests' // Build the project without tests (adjust as needed)
                 // // Use an x86 compatible builder image (replace with actual image name)
                 sh 'mvn spring-boot:build-image'
