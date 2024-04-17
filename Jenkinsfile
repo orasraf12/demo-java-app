@@ -9,18 +9,21 @@ pipeline {
               description: 'Specify the environment to deploy to (dev, staging, prod)'
           )
 
-          booleanParam(
-              name: 'RUN_TESTS',
-              description: 'Should the pipeline run unit tests?'
-          )
+          parameters {
+            booleanParam(
+                name: 'RUN_TESTS',
+                defaultValue: true,  // Set default value to true
+                description: 'Should the pipeline run unit tests?'
+            )
+          }
 
           choice(
               name: 'BRANCH',
               choices: ['master', 'develop', 'feature/my-new-feature'],
               description: 'Select the Git branch to build from'
           )
-
     }
+    
     stages {
         stage('Checkout Code') {
             steps {
