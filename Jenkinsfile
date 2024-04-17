@@ -50,7 +50,7 @@ pipeline {
         }
         stage('Push Docker tag') {
             steps {
-                sh 'docker tag java-petclinic-1:2.3.3 orasraf912/java-project:java-petclinic-2'
+                sh 'docker tag java-petclinic-2:2.3.3 orasraf912/java-project:java-petclinic-2'
             }
         }
          stage('Push Docker Image') {
