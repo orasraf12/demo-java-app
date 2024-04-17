@@ -50,18 +50,19 @@ pipeline {
             steps {
                 sh 'docker tag java-petclinic-2:2.3.3 orasraf912/java-project:java-petclinic-2'
             }
+        }
         stage('Push Docker Image to Docker Hub') {
-                    steps {
-                        script {
-                            docker.withRegistry('https://registry.hub.docker.com', 'orasraf912-dockerhub') {
-                            // Push your Docker image to Docker Hub
-                            docker.image('orasraf912/java-project:java-petclinic-2').push('latest')
-                        }
+                steps {
+                    script {
+                        docker.withRegistry('https://registry.hub.docker.com', 'orasraf912-dockerhub') {
+                        // Push your Docker image to Docker Hub
+                        docker.image('orasraf912/java-project:java-petclinic-2').push('latest')
                     }
                 }
             }
-         }
+        }
     }
+    
     post {
         always {
             archiveArtifacts '**/*.jar' // Archive the built JAR file
