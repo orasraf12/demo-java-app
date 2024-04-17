@@ -26,7 +26,6 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/orasraf12/demo-java-app' 
             }
         }
-
         stage('Test (if not skipped)') {
             when {
                 expression {
@@ -35,10 +34,9 @@ pipeline {
             }
             steps {
                 if (params.RUN_TESTS) {
-                    sh 'mvn clean install'
-                    sh 'mvn clean install -DskipTests'
+                    sh 'mvn clean install' // Run tests
                 } else {
-                    sh "echo 'i in the else'"
+                    sh "echo 'Tests skipped.'" // Informative message when tests are skipped
                 }
             }
         }
@@ -46,8 +44,6 @@ pipeline {
         stage('Build Image') {
             steps {
                 sh 'ls -l'
-                sh 'pwd'
-                sh 'mvn clean install'
                 sh 'mvn spring-boot:build-image'
             }
         }
