@@ -67,7 +67,7 @@ pipeline {
                 }
             }
     }
-
+    }
     post {
         always {
             archiveArtifacts '**/*.jar' // Archive the built JAR file
