@@ -1,8 +1,7 @@
-
 pipeline {
     agent any // Run on any available agent
 
-   parameters {
+    parameters {
         string(
             name: 'ENVIRONMENT',
             defaultValue: 'staging',
@@ -26,6 +25,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/orasraf12/demo-java-app' 
             }
         }
+
         stage('Test (if not skipped)') {
             when {
                 expression {
@@ -34,7 +34,7 @@ pipeline {
             }
             steps {
                 if (params.RUN_TESTS) {
-                    sh 'mvn clean install' // Run tests
+                    sh 'mvn test' // Run tests using Maven command
                 } else {
                     sh "echo 'Tests skipped.'" // Informative message when tests are skipped
                 }
@@ -43,12 +43,12 @@ pipeline {
 
         stage('Build Image') {
             steps {
-                sh 'ls -l'
+                sh 'mvn clean install' // Build the JAR file before building the image
                 sh 'mvn spring-boot:build-image'
             }
         }
 
-       stage('Push Docker Image') {
+        stage('Push Docker Image') {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.oauth.com/v1/', credentialsId: '39705250-6e95-447f-abac-fa54235a99f7') 
