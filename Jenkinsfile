@@ -75,18 +75,18 @@ pipeline {
                 }
             }
         }
-
-    post {
+    }
+   post {
         always {
-            archiveArtifacts '**/*.jar' // Archive the built JAR file (adjust as needed)
+            archiveArtifacts '**/*.jar' // Archive the built JAR file
         }
         success {
             // Define actions on successful build (e.g., send notification)
-            echo 'Build Successful!' // Example message (replace with your desired action)
+            echo 'Build Successful!'
         }
         failure {
             // Define actions on build failure (e.g., send notification)
-            echo 'Build Failed!' // Example message (replace with your desired action)
+            echo 'Build Failed!'
         }
     }
 }
