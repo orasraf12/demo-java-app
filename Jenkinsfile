@@ -53,7 +53,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.oauth.com/v1/', credentialsId: '39705250-6e95-447f-abac-fa54235a99f7') 
+                    docker.withRegistry('', credentialsId: '39705250-6e95-447f-abac-fa54235a99f7') 
                     { // Replace with your registry URL if different
                         def imageName = "${params.IMAGE_NAME}" // Get image name from pipeline parameter (optional)
                         def imageTag = "${params.IMAGE_TAG}"   // Get image tag from pipeline parameter (optional)
