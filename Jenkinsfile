@@ -18,6 +18,9 @@ pipeline {
             description: 'Select the Git branch to build from'
         )
     }
+    environment {
+        DOCKERHUB_CRD = credentialsId('orasraf912-dockerhub')
+    }
 
     stages {
         stage('Checkout Code') {
@@ -49,29 +52,20 @@ pipeline {
                 sh 'mvn spring-boot:build-image'
             }
         }
-
-        stage('Push Docker Image') {
+        stage('Push Docker tag') {
+            steps {
+                sh 'docker tag java-petclinic-1:2.3.3 orasraf912/java-project:java-petclinic-2'
+            }
+        }
+         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('', credentialsId: '39705250-6e95-447f-abac-fa54235a99f7') 
-                    { // Replace with your registry URL if different
-                        def imageName = "${params.IMAGE_NAME}" // Get image name from pipeline parameter (optional)
-                        def imageTag = "${params.IMAGE_TAG}"   // Get image tag from pipeline parameter (optional)
-
-                        if (!imageName) {
-                            imageName = "java-petclinic-1" // Default image name
-                        }
-
-                        if (!imageTag) {
-                            imageTag = "2.3.2" // Default image tag
-                        }
-
-                        def builtImage = docker.build(imageName + ":" + imageTag)
-                        builtImage.push()
+                    // Assuming your Docker image tag is derived from the project name in pom.xml
+                    docker.withRegistry('https://hub.docker.com/v2/', credentialsId: 'docker-hub-credentials') {
+                        sh "docker push orasraf912/java-project:java-petclinic-2"
                     }
                 }
             }
-        }
     }
 
     post {
