@@ -33,10 +33,12 @@ pipeline {
                 }
             }
             steps {
-                if (params.RUN_TESTS) {
-                    sh 'mvn test' // Run tests using Maven command
-                } else {
-                    sh "echo 'Tests skipped.'" // Informative message when tests are skipped
+                script {
+                    if (params.RUN_TESTS) {
+                        sh 'mvn test' // Run tests using Maven command
+                    } else {
+                        sh "echo 'Tests skipped.'" // Informative message when tests are skipped
+                    }
                 }
             }
         }
