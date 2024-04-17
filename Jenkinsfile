@@ -2,28 +2,24 @@
 pipeline {
     agent any // Run on any available agent
 
-    parameters {
-          string(
-              name: 'ENVIRONMENT',
-              defaultValue: 'staging',
-              description: 'Specify the environment to deploy to (dev, staging, prod)'
-          )
-
-          parameters {
-            booleanParam(
-                name: 'RUN_TESTS',
-                defaultValue: true,  // Set default value to true
-                description: 'Should the pipeline run unit tests?'
-            )
-          }
-
-          choice(
-              name: 'BRANCH',
-              choices: ['master', 'develop', 'feature/my-new-feature'],
-              description: 'Select the Git branch to build from'
-          )
+   parameters {
+        string(
+            name: 'ENVIRONMENT',
+            defaultValue: 'staging',
+            description: 'Specify the environment to deploy to (dev, staging, prod)'
+        )
+        booleanParam(
+            name: 'RUN_TESTS',
+            defaultValue: true,  // Set default value to true
+            description: 'Should the pipeline run unit tests?'
+        )
+        choice(
+            name: 'BRANCH',
+            choices: ['master', 'develop', 'feature/my-new-feature'],
+            description: 'Select the Git branch to build from'
+        )
     }
-    
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -56,7 +52,7 @@ pipeline {
             }
         }
 
-        stage('push Docker Image') {
+       stage('Push Docker Image') {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.oauth.com/v1/', credentialsId: '39705250-6e95-447f-abac-fa54235a99f7') 
@@ -79,7 +75,8 @@ pipeline {
             }
         }
     }
-   post {
+
+    post {
         always {
             archiveArtifacts '**/*.jar' // Archive the built JAR file
         }
