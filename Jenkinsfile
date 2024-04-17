@@ -18,10 +18,6 @@ pipeline {
             description: 'Select the Git branch to build from'
         )
     }
-    environment {
-        DOCKERHUB_CRD = credentialsId('orasraf912-dockerhub')
-    }
-
     stages {
         stage('Checkout Code') {
             steps {
@@ -66,7 +62,7 @@ pipeline {
                     }
                 }
             }
-    }
+         }
     }
     post {
         always {
