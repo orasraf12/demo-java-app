@@ -54,18 +54,16 @@ pipeline {
             steps {
                 sh 'docker tag java-petclinic-2:2.3.3 orasraf912/java-project:java-petclinic-2'
             }
-        }
-        stage('Login to Docker Hub') {
-            steps {
-                sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD" // Use environment variables for credentials
+        stage('Push Docker Image to Docker Hub') {
+                    steps {
+                        script {
+                            docker.withRegistry('https://registry.hub.docker.com', 'orasraf912-dockerhub') {
+                            // Push your Docker image to Docker Hub
+                            docker.image('orasraf912/java-project:java-petclinic-2').push('latest')
+                        }
+                    }
+                }
             }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                sh "docker push orasraf912/java-project:java-petclinic-2"
-            }
-        }
     }
     post {
         always {
