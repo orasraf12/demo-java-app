@@ -12,8 +12,17 @@ pipeline {
             steps {
                 sh 'ls -l'
                 sh 'mvn clean install -DskipTests' // Build the project without tests (adjust as needed)
-                sh 'ls -l'
+                sh 'pwd'
                 sh 'mvn spring-boot:build-image'
+            }
+        }
+            stage('Push Image') {
+            steps {
+                script {
+                    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD // Login to Docker registry (using credentials)
+                    docker build -t $imageName . // Build the image in current directory
+                    docker push $imageName // Push the image to registry
+                }
             }
         }
     }
