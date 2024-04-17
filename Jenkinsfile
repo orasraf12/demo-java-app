@@ -18,10 +18,6 @@ pipeline {
             description: 'Select the Git branch to build from'
         )
     }
-    environment {
-        DOCKER_HUB_USERNAME = credentials('orasraf912-dockerhub').username
-        DOCKER_HUB_PASSWORD = credentials('orasraf912-dockerhub').password
-    }
     stages {
         stage('Checkout Code') {
             steps {
