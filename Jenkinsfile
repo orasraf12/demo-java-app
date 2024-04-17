@@ -18,6 +18,10 @@ pipeline {
             description: 'Select the Git branch to build from'
         )
     }
+        environment {
+        DOCKER_HUB_USERNAME = credentials('orasraf912-dockerhub').username
+        DOCKER_HUB_PASSWORD = credentials('orasraf912-dockerhub').password // Use environment variable to avoid exposing password in script
+    }
     stages {
         stage('Checkout Code') {
             steps {
@@ -48,21 +52,41 @@ pipeline {
                 sh 'mvn spring-boot:build-image'
             }
         }
-        stage('Push Docker tag') {
+        stage('Docker tag') {
             steps {
                 sh 'docker tag java-petclinic-2:2.3.3 orasraf912/java-project:java-petclinic-2'
             }
         }
-         stage('Push Docker Image') {
+        stage('Login to Docker Hub') {
             steps {
-                script {
-                    // Assuming your Docker image tag is derived from the project name in pom.xml
-                    docker.withRegistry('https://hub.docker.com/v2/', credentialsId: 'docker-hub-credentials') {
-                        sh "docker push orasraf912/java-project:java-petclinic-2"
-                    }
-                }
+                sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD" // Use environment variables for credentials
             }
-         }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh "docker push orasraf912/java-project:java-petclinic-2"
+            }
+        }
+    
+        // stage('Docker Push') {
+        // agent any
+        //     steps {
+        //             withCredentials([usernamePassword(credentialsId: 'orasraf912-dockerhub', passwordVariable: 'orasraf912-dockerhub', usernameVariable: 'orasraf912-dockerhub')]) {
+        //             sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+        //                 sh "docker push orasraf912/java-project:java-petclinic-2"
+        //         }
+        //     }
+        // }
+        //  stage('Push Docker Image') {
+        //     steps {
+        //         script {
+        //             // Assuming your Docker image tag is derived from the project name in pom.xml
+        //             docker.withRegistry('https://hub.docker.com/v2/', credentialsId: 'docker-hub-credentials') {
+        //             }
+        //         }
+        //     }
+        //  }
     }
     post {
         always {
