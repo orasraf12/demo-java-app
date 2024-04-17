@@ -18,9 +18,9 @@ pipeline {
             description: 'Select the Git branch to build from'
         )
     }
-        environment {
+    environment {
         DOCKER_HUB_USERNAME = credentials('orasraf912-dockerhub').username
-        DOCKER_HUB_PASSWORD = credentials('orasraf912-dockerhub').password // Use environment variable to avoid exposing password in script
+        DOCKER_HUB_PASSWORD = credentials('orasraf912-dockerhub').password
     }
     stages {
         stage('Checkout Code') {
@@ -28,7 +28,6 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/orasraf12/demo-java-app' 
             }
         }
-
         stage('Test (if not skipped)') {
             when {
                 expression {
@@ -45,7 +44,6 @@ pipeline {
                 }
             }
         }
-
         stage('Build Image') {
             steps {
                 sh 'mvn clean install' // Build the JAR file before building the image
@@ -68,25 +66,6 @@ pipeline {
                 sh "docker push orasraf912/java-project:java-petclinic-2"
             }
         }
-    
-        // stage('Docker Push') {
-        // agent any
-        //     steps {
-        //             withCredentials([usernamePassword(credentialsId: 'orasraf912-dockerhub', passwordVariable: 'orasraf912-dockerhub', usernameVariable: 'orasraf912-dockerhub')]) {
-        //             sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-        //                 sh "docker push orasraf912/java-project:java-petclinic-2"
-        //         }
-        //     }
-        // }
-        //  stage('Push Docker Image') {
-        //     steps {
-        //         script {
-        //             // Assuming your Docker image tag is derived from the project name in pom.xml
-        //             docker.withRegistry('https://hub.docker.com/v2/', credentialsId: 'docker-hub-credentials') {
-        //             }
-        //         }
-        //     }
-        //  }
     }
     post {
         always {
